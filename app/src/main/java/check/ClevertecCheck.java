@@ -1,57 +1,70 @@
 package check;
 
 
-import utils.CheckUtility;
+import service.CheckService;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClevertecCheck {
 
-    private static final String WRONG_MESSAGE = "Something wrong wih arguments. Use itemId-quantity pairs. Example: 3-1 2-5 5-1\n" +
+    private static CheckService checkService = new CheckService();
+
+    private static final String PAIR_PATTERN = "(\\d+\\-{1}\\d+)";
+    private static final String CARD_PATTERN = "(card\\-{1}\\d+)";
+    private static final String FILE_PATTERN = "([a-zA-Z0-9.:]+\\\\{1})*(\\w)+(\\.{1}\\w+)";
+
+    private static final String NO_ARGS = "Application requires input arguments";
+    private static final String WRONG_ARGS = "Something wrong wih arguments. Be sure to use itemId-amount pairs. Example: 3-1 2-5 5-1\n" +
             "You can also add a discount card, example: 3-1 2-5 5-1 card-1234.\n" +
             "If you want to process pairs through a file, then write the path to the file. Example: D:\\Items\\Items1.txt D:\\Items\\Items2.txt\n" +
             "File must match <filename>.<extension>";
 
+    private static boolean isPairPresented = false;
+    private static boolean isFilePresented = false;
+    private static boolean isCardPresented = false;
+
     public static void main(String[] args) {
 
-        if (isArgsContainsFiles(args)) {
-            executeDataFromFiles(args);
+        if (!isArgsPresented(args)) {
+            System.out.println(NO_ARGS);
         } else {
-            if (isArgsContainsPairs(args)) {
-                executeDataFromPairs(args);
+            if (isArgsCorrect(args) && isPairPresented) {
+                executeData(args, isFilePresented, isCardPresented);
             } else {
-                System.out.println(WRONG_MESSAGE);
+                System.out.println(WRONG_ARGS);
             }
         }
     }
 
-    private static boolean isArgsContainsFiles(String[] args) {
+    private static boolean isArgsPresented(String[] args) {
+        return args.length == 0 ? false : true;
+    }
 
-        Pattern pattern = Pattern.compile("([a-zA-Z0-9.:]+\\\\{1})*(\\w)+(\\.{1}\\w+)");
+    private static boolean isArgsCorrect(String[] args) {
+
+        Pattern pairPattern = Pattern.compile(PAIR_PATTERN);
+        Pattern cardPattern = Pattern.compile(CARD_PATTERN);
+        Pattern filePattern = Pattern.compile(FILE_PATTERN);
         for (String arg : args) {
-            Matcher matcher = pattern.matcher(arg);
-            if (!matcher.matches()) return false;
+            Matcher pairMatcher = pairPattern.matcher(arg);
+            Matcher cardMatcher = cardPattern.matcher(arg);
+            Matcher fileMatcher = filePattern.matcher(arg);
+
+            if (pairMatcher.matches()) isPairPresented = true;
+            if (fileMatcher.matches()) isFilePresented = true;
+            if (cardMatcher.matches()) isCardPresented = true;
+            if (!pairMatcher.matches() && !cardMatcher.matches() && !fileMatcher.matches()) return false;
         }
+
         return true;
     }
 
-    private static boolean isArgsContainsPairs(String[] args) {
+    private static void executeData(String[] args, boolean fileExistence, boolean cardExistence) {
 
-        return CheckUtility.isArgsContainsPairs(args);
+        checkService.executeData(args, fileExistence, cardExistence);
     }
 
-    private static void executeDataFromFiles(String[] args) {
-
-
-        System.out.println("executing data from files");
-    }
-
-    private static void executeDataFromPairs(String[] args) {
-
-
-        System.out.println("executing data from pairs");
-    }
 
 
 }
