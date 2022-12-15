@@ -1,21 +1,20 @@
-package dao;
+package dao.product;
 
 import model.Card;
 import model.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ItemDaoCollection implements ItemDao {
+public class ProductDaoCollection implements ProductDao {
 
     private List<Product> products = new ArrayList<>();
-    private List<Card> cards = new ArrayList<>();
 
-    public ItemDaoCollection() {
+
+    public ProductDaoCollection() {
        initializeProducts();
-       initializeCards();
+
     }
 
     private void initializeProducts() {
@@ -28,11 +27,8 @@ public class ItemDaoCollection implements ItemDao {
         products.add(new Product(7, "Fridge", new BigDecimal("150.6")));
     }
 
-    private void initializeCards() {
-        cards.add(new Card(1, "card-1", 5));
-        cards.add(new Card(2, "card-2", 10));
-        cards.add(new Card(3, "card-3", 0));
+    @Override
+    public List<Product> findAll() {
+        return products;
     }
-
-
 }

@@ -1,0 +1,7 @@
+1, Book, 12.1
+2, Phone, 85
+3, Computer, 120.5
+4, Toy Bear, 5.3
+5, Pen, 1.2
+6, Jacket, 43.2
+7, Fridge, 150.6
