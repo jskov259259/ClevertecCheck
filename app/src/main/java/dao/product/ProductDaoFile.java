@@ -5,7 +5,7 @@ import utils.Cache;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public class ProductDaoFile implements ProductDao {
     @Override
     public List<Product> findAll() {
 
-        List<Product> products = new LinkedList<>();
+        List<Product> products = new ArrayList<>();
         String path = getPathFromCache();
 
         try {

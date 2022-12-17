@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
-public class CheckCreator {
+public class CheckGenerator {
 
-    public static String createCheck(Map<Product, Integer> productQuantity, Optional<Card> card) {
+    public String generateCheck(Map<Product, Integer> productQuantity, Optional<Card> card) {
         StringBuilder builder = new StringBuilder("Cash Receipt\n");
         builder.append("QTY Description Price TOTAL\n");
         BigDecimal totalPrice = new BigDecimal("0");
