@@ -105,6 +105,7 @@ class CheckServiceTest {
     @Test
     void testGetSelectedCardFromFile() {
 
+        Cache.clearCards();
         Optional<Card> emptyCard = checkService.getSelectedCardFromFile();
         assertNotNull(emptyCard);
         assertTrue(emptyCard.isEmpty());
@@ -128,6 +129,7 @@ class CheckServiceTest {
     @Test
     void testGetSelectedCardFromCollection() {
 
+        Cache.clearCards();
         Optional<Card> emptyCard = checkService.getSelectedCardFromCollection();
         assertNotNull(emptyCard);
         assertTrue(emptyCard.isEmpty());

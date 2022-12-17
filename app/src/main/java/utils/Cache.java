@@ -32,4 +32,8 @@ public class Cache {
     public static List<String> getFiles() {
         return files;
     }
+
+    public static void clearCards() {
+        cards.clear();
+    }
 }
