@@ -45,7 +45,7 @@ public class ProductDaoFile implements ProductDao {
         reader.close();
     }
 
-    private void addProductToList(String line, List<Product> products) {
+    void addProductToList(String line, List<Product> products) {
 
         String[] variables =  line.split(",");
         checkCorrectValuesNumber(variables);
@@ -56,14 +56,14 @@ public class ProductDaoFile implements ProductDao {
         products.add(product);
     }
 
-    private void checkCorrectValuesNumber(String[] variables) {
+    void checkCorrectValuesNumber(String[] variables) {
 
         if (variables.length != 3) {
             throw new IncorrectValuesNumber(INCORRECT_VALUES_NUMBER);
         }
     }
 
-    private String getPathFromCache() {
+    String getPathFromCache() {
 
         Optional<String> optionalPath = Cache.getFiles().stream().filter(file -> file.contains("Products")).findFirst();
         return optionalPath.orElse("Products.txt");
