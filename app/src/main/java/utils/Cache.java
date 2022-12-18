@@ -38,4 +38,6 @@ public class Cache {
     }
 
     public static void clearFiles() { files.clear(); }
+
+    public static void clearPairs() { pairs.clear(); }
 }
