@@ -10,6 +10,7 @@ import java.util.Optional;
 public class CheckGenerator {
 
     private static StringBuilder builder = new StringBuilder("Cash Receipt\n");
+    private static final Integer CHECK_DISCOUNT = 10;
 
 
     public String generateCheck(Map<Product, Integer> productQuantity, Optional<Card> card) {
@@ -19,10 +20,7 @@ public class CheckGenerator {
         builder.append("-------\n");
 
         if (card.isPresent()) {
-            BigDecimal discount = totalPrice.multiply(new BigDecimal(card.get().getDiscount()).divide(new BigDecimal(100)));
-            builder.append("Discount card was presented (" + card.get().getDescription() + ") with " + card.get().getDiscount() + "% discount " +
-                    "(" + discount + "$)\n");
-            totalPrice = totalPrice.subtract(discount);
+            totalPrice = calculateTotalPriceWithCard(totalPrice, card.get());
         }
 
         builder.append("Total: " + totalPrice + "$");
@@ -39,11 +37,7 @@ public class CheckGenerator {
             builder.append(quantity + " " + product.getDescription() + " " + price + "$ ");
 
             if (quantity > 5) {
-                BigDecimal total = multiplyPriceQuantity(price, quantity);
-                BigDecimal discount = total.multiply(new BigDecimal(10)).divide(new BigDecimal(100));
-                total = total.subtract(discount);
-                builder.append(total + "$ (10% discount)\n");
-                totalPrice = totalPrice.add(total);
+                totalPrice = calculateTotalPriceWithHighQuantity(totalPrice, product, quantity);
             } else {
                 builder.append(multiplyPriceQuantity(price, quantity) + "$\n");
                 totalPrice = totalPrice.add(price.multiply(new BigDecimal(quantity)));
@@ -52,8 +46,30 @@ public class CheckGenerator {
         return totalPrice;
     }
 
+    BigDecimal calculateTotalPriceWithCard(BigDecimal total, Card card) {
+
+        BigDecimal discount = calculateDiscount(total, card.getDiscount());
+        builder.append("Discount card was presented (" + card.getDescription() + ") with " + card.getDiscount() + "% discount " +
+                "(" + discount + "$)\n");
+        return total.subtract(discount);
+    }
+
+    BigDecimal calculateTotalPriceWithHighQuantity(BigDecimal totalPrice, Product product, Integer quantity) {
+
+        BigDecimal total = multiplyPriceQuantity(product.getPrice(), quantity);
+        BigDecimal discount = calculateDiscount(total, CHECK_DISCOUNT);
+        total = total.subtract(discount);
+        builder.append(total + "$ (10% discount)\n");
+        return totalPrice.add(total);
+    }
+
     BigDecimal multiplyPriceQuantity(BigDecimal price, Integer quantity) {
 
         return price.multiply(new BigDecimal(quantity));
+    }
+
+    BigDecimal calculateDiscount(BigDecimal total, Integer discount) {
+
+        return total.multiply(new BigDecimal(discount)).divide(new BigDecimal(100));
     }
 }
