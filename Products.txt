@@ -1,4 +1,4 @@
-1, Book, 12.2
+1, Book, 5
 2, Phone, 85
 3, Computer, 120.5
 4, Toy Bear, 5.3

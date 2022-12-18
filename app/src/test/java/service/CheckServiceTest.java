@@ -67,9 +67,11 @@ class CheckServiceTest {
     @Test
     void testCardFileExistence() {
 
+        Cache.clearFiles();
         Cache.saveFile("D:\\File.txt");
         assertFalse(checkService.cardFileExistence());
 
+        Cache.clearFiles();
         Cache.saveFile("D:\\Cards.txt");
         assertTrue(checkService.cardFileExistence());
     }

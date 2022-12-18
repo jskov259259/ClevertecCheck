@@ -33,7 +33,7 @@ public class CardDaoFile implements CardDao {
     }
 
 
-    private Card findCardFromFile(String path, String description) throws IOException {
+     Card findCardFromFile(String path, String description) throws IOException {
 
         Card card = null;
         File file = new File(path);
@@ -50,7 +50,7 @@ public class CardDaoFile implements CardDao {
         return card;
     }
 
-    private boolean descriptionMatches(String line, String description) {
+     boolean descriptionMatches(String line, String description) {
 
         String[] variables = line.split(",");
         checkCorrectValuesNumber(variables);
@@ -60,14 +60,14 @@ public class CardDaoFile implements CardDao {
         return false;
     }
 
-    private void checkCorrectValuesNumber(String[] variables) {
+    void checkCorrectValuesNumber(String[] variables) {
 
         if (variables.length != 3) {
             throw new IncorrectValuesNumber(INCORRECT_VALUES_NUMBER);
         }
     }
 
-    private Card createCard(String line) {
+     Card createCard(String line) {
 
         String[] variables = line.split(",");
         Card card = new Card();
@@ -78,7 +78,7 @@ public class CardDaoFile implements CardDao {
     }
 
 
-    private String getPathFromCache() {
+     String getPathFromCache() {
 
         Optional<String> optionalPath = Cache.getFiles().stream().filter(file -> file.contains("Cards")).findFirst();
         return optionalPath.orElse("Cards.txt");

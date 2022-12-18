@@ -36,4 +36,6 @@ public class Cache {
     public static void clearCards() {
         cards.clear();
     }
+
+    public static void clearFiles() { files.clear(); }
 }

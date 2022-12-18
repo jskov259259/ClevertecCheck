@@ -102,6 +102,9 @@ public class CheckService {
             return Optional.empty();
         }
         Card card = cardDaoFile.getCardByDescription(Cache.getCards().get(0));
+        if (card == null) {
+            System.out.println("No such card found");
+        }
         return Optional.ofNullable(card);
     }
 
@@ -117,7 +120,10 @@ public class CheckService {
             return Optional.empty();
         }
         Card card = cardDaoCollection.getCardByDescription(Cache.getCards().get(0));
-        return Optional.of(card);
+         if (card == null) {
+             System.out.println("No such card found");
+         }
+        return Optional.ofNullable(card);
     }
 
      Map<Product, Integer> createProductQuantityMap(List<Product> products) {

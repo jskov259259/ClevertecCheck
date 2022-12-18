@@ -15,6 +15,7 @@ public class CardDaoCollection implements CardDao {
     }
 
     private void initializeCards() {
+
         cards.add(new Card(1, "card-1", 5));
         cards.add(new Card(2, "card-2", 10));
         cards.add(new Card(3, "card-3", 0));
@@ -22,7 +23,8 @@ public class CardDaoCollection implements CardDao {
 
     @Override
     public Card getCardByDescription(String description) {
+
         Optional<Card> card = cards.stream().filter(c -> c.getDescription().equals(description)).findFirst();
-        return card.get();
+        return card.orElse(null);
     }
 }
