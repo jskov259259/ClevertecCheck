@@ -123,6 +123,7 @@ class CheckServiceTest {
     @Test
     void testIsCardPresented() {
 
+        Cache.clearCards();
         assertFalse(checkService.isCardPresented());
         Cache.saveCard("card-1");
         assertTrue(checkService.isCardPresented());

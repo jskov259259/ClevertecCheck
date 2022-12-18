@@ -23,6 +23,7 @@ class ClevertecCheckMainTest {
     @Test
     void testIsArgsCorrectAndSaveCache() {
 
+        Cache.clearPairs();
         assertFalse(checkMain.isPairsPresented());
         String[] pairsArgs = {"1-2", "2-3"};
         boolean result = checkMain.isArgsCorrectAndSaveCache(pairsArgs);
@@ -35,6 +36,7 @@ class ClevertecCheckMainTest {
         assertTrue(Cache.getPairs().isEmpty());
         assertFalse(result);
 
+        Cache.clearFiles();
         String[] productsArgs = {"Products.txt"};
         result = checkMain.isArgsCorrectAndSaveCache(productsArgs);
         assertTrue(Cache.getFiles().size() > 0);
@@ -45,6 +47,7 @@ class ClevertecCheckMainTest {
         assertTrue(Cache.getFiles().isEmpty());
         assertFalse(result);
 
+        Cache.clearCards();
         String[] cardArgs = {"card-1"};
         result = checkMain.isArgsCorrectAndSaveCache(cardArgs);
         assertTrue(Cache.getCards().size() > 0);
@@ -62,6 +65,7 @@ class ClevertecCheckMainTest {
 
     @Test
     void testIsArgsPresented() {
+
         String noArgs[] = {};
         assertFalse(checkMain.isArgsPresented(noArgs));
         String args[] = {"1-2", "card-1"};
