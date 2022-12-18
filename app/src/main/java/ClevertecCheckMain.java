@@ -1,6 +1,3 @@
-package main;
-
-
 import service.CheckService;
 import utils.Cache;
 
@@ -36,11 +33,11 @@ public class ClevertecCheckMain {
         }
     }
 
-    private boolean isArgsPresented(String[] args) {
+    boolean isArgsPresented(String[] args) {
         return args.length == 0 ? false : true;
     }
 
-    private boolean isArgsCorrectAndSaveCache(String[] args) {
+    boolean isArgsCorrectAndSaveCache(String[] args) {
 
         Pattern pairPattern = Pattern.compile(PAIR_PATTERN.getPattern());
         Pattern cardPattern = Pattern.compile(CARD_PATTERN.getPattern());
@@ -68,9 +65,11 @@ public class ClevertecCheckMain {
         return true;
     }
 
-    private void executeData() {
-
+    void executeData() {
         checkService.executeData();
     }
 
+    public static boolean isPairsPresented() {
+        return isPairsPresented;
+    }
 }
