@@ -1,5 +1,6 @@
 package dao.product;
 
+import exceptions.IncorrectValuesNumber;
 import model.Product;
 import utils.Cache;
 
@@ -11,6 +12,9 @@ import java.util.Optional;
 
 public class ProductDaoFile implements ProductDao {
 
+    private static final String INCORRECT_VALUES_NUMBER = "Incorrect values number in product file.\n" +
+            "File must contain: itemId, description, price. Values must be separated by commas.";
+
     @Override
     public List<Product> findAll() {
 
@@ -20,7 +24,9 @@ public class ProductDaoFile implements ProductDao {
         try {
             addProductsFromFile(path, products);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+        } catch (IncorrectValuesNumber e) {
+            System.out.println(e.getMessage());
         }
 
         return products;
@@ -42,16 +48,23 @@ public class ProductDaoFile implements ProductDao {
     private void addProductToList(String line, List<Product> products) {
 
         String[] variables =  line.split(",");
+        checkCorrectValuesNumber(variables);
         Product product = new Product();
         product.setId(Integer.parseInt(variables[0].trim()));
         product.setDescription(variables[1].trim());
         product.setPrice(new BigDecimal(variables[2].trim()));
-
         products.add(product);
     }
 
+    private void checkCorrectValuesNumber(String[] variables) {
+
+        if (variables.length != 3) {
+            throw new IncorrectValuesNumber(INCORRECT_VALUES_NUMBER);
+        }
+    }
 
     private String getPathFromCache() {
+
         Optional<String> optionalPath = Cache.getFiles().stream().filter(file -> file.contains("Products")).findFirst();
         return optionalPath.orElse("Products.txt");
     }

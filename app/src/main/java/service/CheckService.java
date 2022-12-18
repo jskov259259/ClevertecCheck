@@ -45,9 +45,12 @@ public class CheckService {
             card = getSelectedCardFromCollection();
         }
 
+        if (products.isEmpty()) {
+            return;
+        }
+
         productQuantityMap = createProductQuantityMap(products);
         createCheck(productQuantityMap, card);
-
     }
 
      boolean productFileExistence() {
@@ -66,7 +69,7 @@ public class CheckService {
 
         List<Product> allProducts = productDaoFile.findAll();
         List<Product> selectedProducts = getSelectedProducts(allProducts);
-         return selectedProducts;
+        return selectedProducts;
     }
 
      List<Product> getSelectedProductsFromCollection() {
@@ -82,11 +85,13 @@ public class CheckService {
         List<String> pairs = Cache.getPairs();
         for (String pair : pairs) {
             String[] idQuantity = pair.split("-");
+
             for (Product product : allProducts) {
                 if (product.getId() == Integer.parseInt(idQuantity[0])) {
                     selectedProducts.add(product);
                 }
             }
+
         }
         return selectedProducts;
     }
@@ -97,15 +102,17 @@ public class CheckService {
             return Optional.empty();
         }
         Card card = cardDaoFile.getCardByDescription(Cache.getCards().get(0));
-        return Optional.of(card);
+        return Optional.ofNullable(card);
     }
 
      boolean isCardPresented() {
+
         List<String> cards = Cache.getCards();
         return !cards.isEmpty();
     }
 
      Optional<Card> getSelectedCardFromCollection() {
+
         if (!isCardPresented()) {
             return Optional.empty();
         }

@@ -1,5 +1,6 @@
 package dao.card;
 
+import exceptions.IncorrectValuesNumber;
 import model.Card;
 import utils.Cache;
 
@@ -11,6 +12,9 @@ import java.util.Optional;
 
 public class CardDaoFile implements CardDao {
 
+    private static final String INCORRECT_VALUES_NUMBER = "Incorrect values number in card file.\n" +
+            "File must contain: cardId, description, discount. Values must be separated by commas.\n" +
+            "The check will be provided without a discount card.";
 
     @Override
     public Card getCardByDescription(String description) {
@@ -21,7 +25,9 @@ public class CardDaoFile implements CardDao {
         try {
             card = findCardFromFile(path, description);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+        } catch (IncorrectValuesNumber e) {
+            System.out.println(e.getMessage());
         }
         return card;
     }
@@ -47,10 +53,18 @@ public class CardDaoFile implements CardDao {
     private boolean descriptionMatches(String line, String description) {
 
         String[] variables = line.split(",");
+        checkCorrectValuesNumber(variables);
         if (variables[1].trim().equals(description)) {
             return true;
         }
         return false;
+    }
+
+    private void checkCorrectValuesNumber(String[] variables) {
+
+        if (variables.length != 3) {
+            throw new IncorrectValuesNumber(INCORRECT_VALUES_NUMBER);
+        }
     }
 
     private Card createCard(String line) {
@@ -65,6 +79,7 @@ public class CardDaoFile implements CardDao {
 
 
     private String getPathFromCache() {
+
         Optional<String> optionalPath = Cache.getFiles().stream().filter(file -> file.contains("Cards")).findFirst();
         return optionalPath.orElse("Cards.txt");
     }
