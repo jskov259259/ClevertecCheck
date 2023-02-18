@@ -1,6 +1,5 @@
 package dao.product;
 
-import model.Card;
 import model.Product;
 
 import java.math.BigDecimal;

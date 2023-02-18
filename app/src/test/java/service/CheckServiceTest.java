@@ -1,7 +1,7 @@
 package service;
 
 import dao.card.CardDaoCollection;
-import dao.card.CardDaoFile;;
+import dao.card.CardDaoFile;
 import dao.product.ProductDaoCollection;
 import dao.product.ProductDaoFile;
 import model.Card;
@@ -54,10 +54,7 @@ class CheckServiceTest {
     }
 
     @Test
-    void testProductFileExistence() {
-
-        Cache.saveFile("D:\\Items.docx");
-        assertFalse(checkService.productFileExistence());
+    void checkIsProductFileExist() {
 
         Cache.saveFile("D:\\Products.docx");
         assertTrue(checkService.productFileExistence());
@@ -65,11 +62,14 @@ class CheckServiceTest {
     }
 
     @Test
-    void testCardFileExistence() {
+    void checkIsProductFileNotExist() {
 
         Cache.clearFiles();
-        Cache.saveFile("D:\\File.txt");
-        assertFalse(checkService.cardFileExistence());
+        assertFalse(checkService.productFileExistence());
+    }
+
+    @Test
+    void checkIsCardFileExist() {
 
         Cache.clearFiles();
         Cache.saveFile("D:\\Cards.txt");
@@ -77,97 +77,143 @@ class CheckServiceTest {
     }
 
     @Test
-    void testGetSelectedProductsFromFile() {
+    void checkIsCardFileNotExist() {
 
+        Cache.clearFiles();
+        assertFalse(checkService.cardFileExistence());
+    }
+
+    @Test
+    void checkGetSelectedProductsFromFile() {
+
+        int expectedSize = 3;
         Mockito.when(productDaoFile.findAll()).thenReturn(getProductList());
+
         List<Product> selectedProducts = checkService.getSelectedProductsFromFile();
+
         Mockito.verify(productDaoFile).findAll();
         assertNotNull(selectedProducts);
-        assertEquals(selectedProducts.size(), 3);
+        assertEquals(expectedSize, selectedProducts.size());
     }
 
     @Test
-    void testGetSelectedProductsFromCollection() {
+    void checkGetSelectedProductsFromCollection() {
 
+        int expectedSize = 3;
         Mockito.when(productDaoCollection.findAll()).thenReturn(getProductList());
+
         List<Product> selectedProducts = checkService.getSelectedProductsFromCollection();
+
         Mockito.verify(productDaoCollection).findAll();
         assertNotNull(selectedProducts);
-        assertEquals(selectedProducts.size(), 3);
+        assertEquals(expectedSize, selectedProducts.size());
     }
 
     @Test
-    void testGetSelectedProducts() {
+    void checkGetSelectedProducts() {
+
+        int expectedSize = 3;
 
         List<Product> selectedProducts = checkService.getSelectedProducts(getProductList());
+
         assertNotNull(selectedProducts);
-        assertEquals(selectedProducts.size(), 3);
+        assertEquals(expectedSize, selectedProducts.size());
     }
 
     @Test
-    void testGetSelectedCardFromFile() {
+    void checkGetSelectedCardFromFile() {
+
+        Cache.saveCard("card-1");
+        Card expectedCard = getCard();
+        Mockito.when(cardDaoFile.getCardByDescription(any())).thenReturn(expectedCard);
+
+        Optional<Card> card = checkService.getSelectedCardFromFile();
+
+        Mockito.verify(cardDaoFile).getCardByDescription(any());
+        assertNotNull(card);
+        assertEquals(expectedCard.getDescription(), card.get().getDescription());
+    }
+
+    @Test
+    void checkGetSelectedCardFromFileIsEmpty() {
 
         Cache.clearCards();
         Optional<Card> emptyCard = checkService.getSelectedCardFromFile();
         assertNotNull(emptyCard);
         assertTrue(emptyCard.isEmpty());
-
-        Cache.saveCard("card-1");
-        Mockito.when(cardDaoFile.getCardByDescription(any())).thenReturn(getCard());
-        Optional<Card> card = checkService.getSelectedCardFromFile();
-        Mockito.verify(cardDaoFile).getCardByDescription(any());
-        assertNotNull(card);
-        assertEquals(getCard().getDescription(), card.get().getDescription());
     }
 
     @Test
-    void testIsCardPresented() {
+    void checkIsCardPresented() {
 
-        Cache.clearCards();
-        assertFalse(checkService.isCardPresented());
         Cache.saveCard("card-1");
         assertTrue(checkService.isCardPresented());
     }
 
     @Test
-    void testGetSelectedCardFromCollection() {
+    void checkIsCardNotPresented() {
+
+        Cache.clearCards();
+        assertFalse(checkService.isCardPresented());
+    }
+
+    @Test
+    void checkGetSelectedCardFromCollection() {
+
+        Cache.saveCard("card-1");
+        Card expectedCard = getCard();
+        Mockito.when(cardDaoCollection.getCardByDescription(any())).thenReturn(expectedCard);
+
+        Optional<Card> card = checkService.getSelectedCardFromCollection();
+
+        Mockito.verify(cardDaoCollection).getCardByDescription(any());
+        assertNotNull(card);
+        assertEquals(expectedCard.getDescription(), card.get().getDescription());
+    }
+
+    @Test
+    void checkGetSelectedCardFromCollectionIsEmpty() {
 
         Cache.clearCards();
         Optional<Card> emptyCard = checkService.getSelectedCardFromCollection();
         assertNotNull(emptyCard);
         assertTrue(emptyCard.isEmpty());
-
-        Cache.saveCard("card-1");
-        Mockito.when(cardDaoCollection.getCardByDescription(any())).thenReturn(getCard());
-        Optional<Card> card = checkService.getSelectedCardFromCollection();
-        Mockito.verify(cardDaoCollection).getCardByDescription(any());
-        assertNotNull(card);
-        assertEquals(getCard().getDescription(), card.get().getDescription());
     }
 
-    @Test
-    void testCreateProductQuantityMap() {
 
-        Map<Product, Integer> map = checkService.createProductQuantityMap(getProductList());
+    @Test
+    void checkCreateProductQuantityMap() {
+
+        int expectedMapSize = 3;
+        int expectedQuantity = 6;
+        List<Product> expectedList = getProductList();
+        Map<Product, Integer> map = checkService.createProductQuantityMap(expectedList);
+
         assertNotNull(map);
-        assertEquals(map.size(), 3);
-        assertEquals(map.get(getProductList().get(1)), 6);
+        assertEquals(expectedMapSize, map.size());
+        assertEquals(expectedQuantity, map.get(expectedList.get(1)));
     }
 
     @Test
-    void testCreateCheck() {
+    void checkCreateCheck() {
 
-        Mockito.when(checkGenerator.generateCheck(any(), any())).thenReturn("Some check");
+        String someCheck = "Some check";
+        Mockito.when(checkGenerator.generateCheck(any(), any())).thenReturn(someCheck);
+
         checkService.createCheck(any(), any());
+
         Mockito.verify(checkGenerator).generateCheck(any(), any());
     }
 
     @Test
-    void testWriteCheck() {
+    void checkWriteCheck() {
 
+        String someCheck = "Some check";
         Mockito.doNothing().when(consoleWriter).writeCheck(any());
         Mockito.doNothing().when(fileWriter).writeCheck(any());
-        checkService.writeCheck("Some check");
+
+        checkService.writeCheck(someCheck);
+
         Mockito.verify(consoleWriter).writeCheck(any());
         Mockito.verify(fileWriter).writeCheck(any());
     }
