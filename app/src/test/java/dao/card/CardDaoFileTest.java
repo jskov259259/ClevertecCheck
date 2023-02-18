@@ -2,25 +2,25 @@ package dao.card;
 
 import exceptions.IncorrectValuesNumber;
 import model.Card;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import utils.Cache;
 
-import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class CardDaoFileTest {
 
-    private CardDaoFile cardDaoFile = new CardDaoFile();
+    private CardDaoFile cardDaoFile;
 
+    @BeforeEach
+    void setUp() {
+        cardDaoFile = new CardDaoFile();
+    }
 
     @Test
-    void testDescriptionMatches() {
+    void checkIsDescriptionMatches() {
 
         String line = "2, card-2, 15";
         String description = "card-2";
@@ -30,16 +30,29 @@ class CardDaoFileTest {
     }
 
     @Test
+    void checkIsDescriptionNotMatches() {
+
+        String line = "2, card-2, 15";
+        String description = "card-3";
+        assertFalse(cardDaoFile.descriptionMatches(line, description));
+    }
+
+    @Test
     void testCheckCorrectValuesNumber() {
 
         String[] correctVars = {"1", "card-1", "12"};
         assertDoesNotThrow(() -> cardDaoFile.checkCorrectValuesNumber(correctVars));
+    }
+
+    @Test
+    void testCheckCorrectValuesNumberShouldThrow() {
+
         String[] incorrectVars = {"1", "card-1"};
         assertThrows(IncorrectValuesNumber.class, () -> cardDaoFile.checkCorrectValuesNumber(incorrectVars));
     }
 
     @Test
-    void testCreateCard() {
+    void checkCreateCard() {
 
         String line = "1, card-2, 4";
         Card card = cardDaoFile.createCard(line);
@@ -50,7 +63,7 @@ class CardDaoFileTest {
     }
 
     @Test
-    void testGetPathFromCache() {
+    void checkGetPathFromCache() {
 
         Cache.clearFiles();
         Cache.saveFile("D:\\Cards.txt");
