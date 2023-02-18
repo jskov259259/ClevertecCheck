@@ -2,65 +2,80 @@ package utils;
 
 import model.Card;
 import model.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CheckGeneratorTest {
 
-    private CheckGenerator checkGenerator = new CheckGenerator();
+    private CheckGenerator checkGenerator;
 
-    @Test
-    void testCalculateTotalPrice() {
-
-        Map<Product, Integer> map = getProductQuantityMap();
-        BigDecimal result = checkGenerator.calculateTotalPrice(map);
-        assertEquals(new BigDecimal("100"), result);
-
-        // test for item with quantity > 5
-        map.put(new Product(4, "Fridge", new BigDecimal(10)), 10);
-        result = checkGenerator.calculateTotalPrice(map);
-        assertEquals(new BigDecimal("190"), result);
+    @BeforeEach
+    void setUp() {
+        checkGenerator = new CheckGenerator();
     }
 
     @Test
-    void testCalculateTotalPriceWithCard() {
+    void checkCalculateTotalPrice() {
+
+        BigDecimal expectedPrice = new BigDecimal("100");
+        Map<Product, Integer> map = getProductQuantityMap();
+        BigDecimal result = checkGenerator.calculateTotalPrice(map);
+        assertEquals(expectedPrice, result);
+    }
+
+    @Test
+    void checkCalculateTotalPriceWithItemQuantityOver5() {
+
+        Map<Product, Integer> map = getProductQuantityMap();
+        BigDecimal expectedPrice = new BigDecimal("190");
+        map.put(new Product(4, "Fridge", new BigDecimal(10)), 10);
+        BigDecimal result = checkGenerator.calculateTotalPrice(map);
+        assertEquals(expectedPrice, result);
+    }
+
+    @Test
+    void checkCalculateTotalPriceWithCard() {
 
         BigDecimal total = new BigDecimal("100");
         Card card = getCard();
+        BigDecimal expectedResult = new BigDecimal("90");
+
         BigDecimal result = checkGenerator.calculateTotalPriceWithCard(total, card);
-        assertEquals(new BigDecimal("90"), result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
-    void testCalculateTotalPriceWithHighQuantity() {
+    void checkCalculateTotalPriceWithHighQuantity() {
 
         BigDecimal total = new BigDecimal("100");
         Product product = getProduct();
         Integer quantity = 10;
+        BigDecimal expectedResult = new BigDecimal("190");
         BigDecimal result = checkGenerator.calculateTotalPriceWithHighQuantity(total, product, quantity);
-        assertEquals(new BigDecimal("190"), result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
-    void testMultiplyPriceQuantity() {
+    void checkMultiplyPriceQuantity() {
 
         BigDecimal price = new BigDecimal("10");
         Integer quantity = 5;
+        BigDecimal expectedResult = new BigDecimal("50");
         BigDecimal result = checkGenerator.multiplyPriceQuantity(price, quantity);
-        assertEquals(new BigDecimal("50"), result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
-    void testCalculateDiscount() {
+    void checkCalculateDiscount() {
 
         BigDecimal total = new BigDecimal("1000");
         Integer discount = 10;
+        BigDecimal expectedResult = new BigDecimal("100");
         BigDecimal result = checkGenerator.calculateDiscount(total, discount);
         assertEquals(new BigDecimal("100"), result);
     }
