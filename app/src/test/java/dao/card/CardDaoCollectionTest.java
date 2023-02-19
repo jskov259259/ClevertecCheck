@@ -3,6 +3,8 @@ package dao.card;
 import model.Card;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,25 +17,22 @@ class CardDaoCollectionTest {
         cardDaoCollection = new CardDaoCollection();
     }
 
-    @Test
-    void checkGetCardByDescription() {
+    @ParameterizedTest
+    @ValueSource(strings = {"card-1", "card-2", "card-3"})
+    void checkGetCardByDescription(String card) {
 
-        //prepare
-        String cardDescription = "card-1";
-        //action
-        Card card = cardDaoCollection.getCardByDescription("card-1");
-        //check
-        assertNotNull(card);
-        assertEquals("card-1", card.getDescription());
+        Card resultCard = cardDaoCollection.getCardByDescription(card);
+
+        assertNotNull(resultCard);
+        assertEquals(card, resultCard.getDescription());
     }
 
-    @Test
-    void checkGetCardByDescriptionShouldReturnNull() {
+    @ParameterizedTest
+    @ValueSource(strings = {"card-4", "card-5", "card-6"})
+    void checkGetCardByDescriptionShouldReturnNull(String card) {
 
-        //prepare
-        String cardDescription = "card-4";
         //action
-        Card nullableCard = cardDaoCollection.getCardByDescription(cardDescription);
+        Card nullableCard = cardDaoCollection.getCardByDescription(card);
         //check
         assertNull(nullableCard);
     }

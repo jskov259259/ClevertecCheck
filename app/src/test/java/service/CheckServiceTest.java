@@ -9,9 +9,7 @@ import model.Product;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import utils.Cache;
 import utils.CheckGenerator;
@@ -44,6 +42,10 @@ class CheckServiceTest {
     @Mock
     private CheckWriterCreator fileWriter;
 
+    @Captor
+    ArgumentCaptor<String> cardCaptor;
+    @Captor
+    ArgumentCaptor<String> checkCaptor;
 
     @BeforeAll
     public static void init() {
@@ -58,7 +60,6 @@ class CheckServiceTest {
 
         Cache.saveFile("D:\\Products.docx");
         assertTrue(checkService.productFileExistence());
-
     }
 
     @Test
@@ -129,8 +130,9 @@ class CheckServiceTest {
 
         Optional<Card> card = checkService.getSelectedCardFromFile();
 
-        Mockito.verify(cardDaoFile).getCardByDescription(any());
+        Mockito.verify(cardDaoFile).getCardByDescription(cardCaptor.capture());
         assertNotNull(card);
+        assertEquals("card-1", cardCaptor.getValue());
         assertEquals(expectedCard.getDescription(), card.get().getDescription());
     }
 
@@ -166,8 +168,9 @@ class CheckServiceTest {
 
         Optional<Card> card = checkService.getSelectedCardFromCollection();
 
-        Mockito.verify(cardDaoCollection).getCardByDescription(any());
+        Mockito.verify(cardDaoCollection).getCardByDescription(cardCaptor.capture());
         assertNotNull(card);
+        assertEquals("card-1", cardCaptor.getValue());
         assertEquals(expectedCard.getDescription(), card.get().getDescription());
     }
 
@@ -214,8 +217,10 @@ class CheckServiceTest {
 
         checkService.writeCheck(someCheck);
 
-        Mockito.verify(consoleWriter).writeCheck(any());
-        Mockito.verify(fileWriter).writeCheck(any());
+        Mockito.verify(consoleWriter).writeCheck(checkCaptor.capture());
+        assertEquals(someCheck, checkCaptor.getValue());
+        Mockito.verify(fileWriter).writeCheck(checkCaptor.capture());
+        assertEquals(someCheck, checkCaptor.getValue());
     }
 
 
