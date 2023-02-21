@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CacheTest {
 
     @Test
-    void testSavePair() {
+    void checkSavePair() {
 
         Cache.clearPairs();
         Cache.savePair("2-3");
@@ -17,7 +17,7 @@ class CacheTest {
     }
 
     @Test
-    void testSaveFile() {
+    void checkSaveFile() {
 
         Cache.clearFiles();
         Cache.saveFile("Products.txt");
@@ -27,7 +27,7 @@ class CacheTest {
     }
 
     @Test
-    void testSaveCard() {
+    void checkSaveCard() {
 
         Cache.clearCards();
         Cache.saveCard("card-1");
@@ -37,7 +37,7 @@ class CacheTest {
     }
 
     @Test
-    void testClearPairs() {
+    void checkClearPairs() {
 
         Cache.clearPairs();
         Cache.savePair("2-3");
@@ -47,7 +47,7 @@ class CacheTest {
     }
 
     @Test
-    void testClearFiles() {
+    void checkClearFiles() {
 
         Cache.clearFiles();
         Cache.saveFile("Products.txt");
@@ -58,7 +58,7 @@ class CacheTest {
     }
 
     @Test
-    void testClearCards() {
+    void checkClearCards() {
 
         Cache.clearCards();
         Cache.saveCard("card-1");
@@ -66,5 +66,4 @@ class CacheTest {
         Cache.clearCards();
         assertTrue(Cache.getCards().isEmpty());
     }
-
 }
