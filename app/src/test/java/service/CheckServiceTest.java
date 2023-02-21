@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import utils.Cache;
 import utils.CheckGenerator;
 import writer.*;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -183,7 +182,6 @@ class CheckServiceTest {
         assertTrue(emptyCard.isEmpty());
     }
 
-
     @Test
     void checkCreateProductQuantityMap() {
 
@@ -223,7 +221,6 @@ class CheckServiceTest {
         assertEquals(someCheck, checkCaptor.getValue());
     }
 
-
     private List<Product> getProductList() {
 
         List<Product> products = new ArrayList<>();
@@ -237,5 +234,4 @@ class CheckServiceTest {
     private Card getCard() {
         return new Card(1, "card-1", 5);
     }
-
 }

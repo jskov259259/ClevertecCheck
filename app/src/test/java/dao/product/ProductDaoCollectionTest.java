@@ -22,5 +22,6 @@ class ProductDaoCollectionTest {
         List<Product> products = productDaoCollection.findAll();
         assertNotNull(products);
         assertTrue(products.size() > 0);
+        assertEquals(1, products.get(0).getId());
     }
 }

@@ -2,7 +2,6 @@ package writer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -28,5 +27,4 @@ class CheckConsoleWriterTest {
         assertEquals(check, outputStreamCaptor.toString()
                 .trim());
     }
-
 }

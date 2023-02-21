@@ -66,5 +66,4 @@ class CacheTest {
         Cache.clearCards();
         assertTrue(Cache.getCards().isEmpty());
     }
-
 }

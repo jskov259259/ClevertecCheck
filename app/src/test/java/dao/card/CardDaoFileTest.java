@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Cache;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -70,5 +69,4 @@ class CardDaoFileTest {
         String path = cardDaoFile.getPathFromCache();
         assertEquals("D:\\Cards.txt", path);
     }
-
 }

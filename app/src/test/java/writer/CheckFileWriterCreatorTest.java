@@ -20,5 +20,4 @@ class CheckFileWriterCreatorTest {
         CheckWriter fileWriter = writerCreator.createWriter();
         assertEquals(fileWriter.getClass(), CheckFileWriter.class);
     }
-
 }

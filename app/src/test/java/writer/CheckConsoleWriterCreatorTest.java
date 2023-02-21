@@ -21,5 +21,4 @@ class CheckConsoleWriterCreatorTest {
         assertEquals(consoleWriter.getClass(), CheckConsoleWriter.class);
     }
 
-
 }

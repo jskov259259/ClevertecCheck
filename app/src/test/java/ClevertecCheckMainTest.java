@@ -70,7 +70,6 @@ class ClevertecCheckMainTest {
         boolean result = checkMain.isArgsCorrectAndSaveCache(incorrectCardsArgs);
         assertTrue(Cache.getCards().isEmpty());
         assertFalse(result);
-
     }
 
     @Test

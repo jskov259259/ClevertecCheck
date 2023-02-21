@@ -1,13 +1,11 @@
 package dao.product;
 
 import exceptions.IncorrectValuesNumber;
-import model.Card;
 import model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Cache;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,5 +51,4 @@ class ProductDaoFileTest {
         String path = productDaoFile.getPathFromCache();
         assertEquals("D:\\Products.txt", path);
     }
-
 }

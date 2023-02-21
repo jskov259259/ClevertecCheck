@@ -77,7 +77,7 @@ class CheckGeneratorTest {
         Integer discount = 10;
         BigDecimal expectedResult = new BigDecimal("100");
         BigDecimal result = checkGenerator.calculateDiscount(total, discount);
-        assertEquals(new BigDecimal("100"), result);
+        assertEquals(expectedResult, result);
     }
 
     private Map<Product, Integer> getProductQuantityMap() {
