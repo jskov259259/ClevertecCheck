@@ -1,75 +1,97 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import service.CheckService;
 import utils.Cache;
 
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
-@ExtendWith(MockitoExtension.class)
 class ClevertecCheckMainTest {
 
-    @Mock
-    private static CheckService checkService;
-
-    @InjectMocks
     private ClevertecCheckMain checkMain;
 
-    @Test
-    void testIsArgsCorrectAndSaveCache() {
+    @BeforeEach
+    void setUp() {
+        checkMain = new ClevertecCheckMain();
+    }
 
-        Cache.clearPairs();
-        assertFalse(checkMain.isPairsPresented());
+    @Test
+    void checkIsArgsCorrectAndSaveCachePairs() {
+
         String[] pairsArgs = {"1-2", "2-3"};
         boolean result = checkMain.isArgsCorrectAndSaveCache(pairsArgs);
-        assertTrue(checkMain.isPairsPresented());
         assertTrue(Cache.getPairs().size() > 0);
         assertTrue(result);
+    }
+
+    @Test
+    void checkIsArgsNotCorrectAndPairsCacheIsEmpty() {
+
         Cache.clearPairs();
         String[] incorrectPairsArgs = {"1-2.3", "2-3"};
-        result = checkMain.isArgsCorrectAndSaveCache(incorrectPairsArgs);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(incorrectPairsArgs);
         assertTrue(Cache.getPairs().isEmpty());
         assertFalse(result);
+    }
+
+    @Test
+    void checkIsArgsCorrectAndSaveCacheFiles() {
 
         Cache.clearFiles();
         String[] productsArgs = {"Products.txt"};
-        result = checkMain.isArgsCorrectAndSaveCache(productsArgs);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(productsArgs);
         assertTrue(Cache.getFiles().size() > 0);
         assertTrue(result);
+    }
+
+    @Test
+    void checkIsArgsNotCorrectAndFileCacheIsEmpty() {
+
         Cache.clearFiles();
         String[] incorrectProductsArgs = {"Items.txt"};
-        result = checkMain.isArgsCorrectAndSaveCache(incorrectProductsArgs);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(incorrectProductsArgs);
         assertTrue(Cache.getFiles().isEmpty());
         assertFalse(result);
+    }
+
+    @Test
+    void checkIsArgsCorrectAndSaveCacheCards() {
 
         Cache.clearCards();
         String[] cardArgs = {"card-1"};
-        result = checkMain.isArgsCorrectAndSaveCache(cardArgs);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(cardArgs);
         assertTrue(Cache.getCards().size() > 0);
         assertTrue(result);
+    }
+
+    @Test
+    void checkIsArgsInCorrectAndCardCacheIsEmpty() {
+
         Cache.clearCards();
         String[] incorrectCardsArgs = {"card11-2"};
-        result = checkMain.isArgsCorrectAndSaveCache(incorrectCardsArgs);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(incorrectCardsArgs);
         assertTrue(Cache.getCards().isEmpty());
         assertFalse(result);
+    }
+
+    @Test
+    void checkIsArgsInCorrectWithManyCardsAndCardCacheIsEmpty() {
+
         Cache.clearCards();
         String[] manyCards = {"card-1", "card-2"};
-        result = checkMain.isArgsCorrectAndSaveCache(manyCards);
+        boolean result = checkMain.isArgsCorrectAndSaveCache(manyCards);
         assertFalse(result);
     }
 
     @Test
     void testIsArgsPresented() {
 
-        String noArgs[] = {};
-        assertFalse(checkMain.isArgsPresented(noArgs));
         String args[] = {"1-2", "card-1"};
         assertTrue(checkMain.isArgsPresented(args));
     }
 
+    @Test
+    void testIsArgsNotPresented() {
+
+        String noArgs[] = {};
+        assertFalse(checkMain.isArgsPresented(noArgs));
+    }
 }
