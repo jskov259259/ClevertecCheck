@@ -8,7 +8,7 @@ import static utils.Pattern.*;
 
 public class ClevertecCheckMain {
 
-    private static CheckService checkService = new CheckService();
+    private CheckService checkService = new CheckService();
 
     private static final String NO_ARGS = "Application requires input arguments";
     private static final String WRONG_ARGS = "Something wrong wih arguments. Be sure to use itemId-amount pairs. Example: 3-1 2-5 5-1\n" +
@@ -21,12 +21,16 @@ public class ClevertecCheckMain {
     public static void main(String[] args) {
 
         ClevertecCheckMain clevertecCheck = new ClevertecCheckMain();
+        clevertecCheck.run(args);
+    }
 
-        if (!clevertecCheck.isArgsPresented(args)) {
+    private void run(String[] args) {
+
+        if (!isArgsPresented(args)) {
             System.out.println(NO_ARGS);
         } else {
-            if (clevertecCheck.isArgsCorrectAndSaveCache(args) && isPairsPresented) {
-                clevertecCheck.executeData();
+            if (isArgsCorrectAndSaveCache(args) && isPairsPresented) {
+                executeData();
             } else {
                 System.out.println(WRONG_ARGS);
             }
@@ -72,4 +76,5 @@ public class ClevertecCheckMain {
     public static boolean isPairsPresented() {
         return isPairsPresented;
     }
+
 }
