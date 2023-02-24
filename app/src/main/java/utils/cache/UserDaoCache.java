@@ -2,9 +2,7 @@ package utils.cache;
 
 import model.User;
 
-import java.util.Optional;
-
-public interface DaoCache {
+public interface UserDaoCache {
 
     User getUserById(Integer id);
 

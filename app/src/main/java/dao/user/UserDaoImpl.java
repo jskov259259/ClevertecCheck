@@ -6,13 +6,13 @@ import java.util.*;
 
 public class UserDaoImpl implements UserDao {
 
-    private Map<Integer, User> users = new HashMap<>();
+    private static Map<Integer, User> users = new HashMap<>();
 
-    public UserDaoImpl() {
+    static {
         initializeUsers();
     }
 
-    private void initializeUsers() {
+    private static void initializeUsers() {
 
         users.put(1, new User(1, "Jack"));
         users.put(2, new User(2, "Bob"));
