@@ -1,5 +1,6 @@
 package utils;
 
+import model.Card;
 import model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,11 @@ class JsonParserImplTest {
         person.setName("Bob");
         person.setEmail("bob@mail.ru");
         person.setAge(30);
+
+        Card card = new Card();
+        card.setId(1);
+        card.setDescription("card-1");
+        person.setCard(card);
         return person;
     }
 }
