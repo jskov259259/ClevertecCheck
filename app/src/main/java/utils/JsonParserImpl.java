@@ -1,5 +1,6 @@
 package utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
@@ -8,7 +9,7 @@ public class JsonParserImpl implements JsonParser {
     private StringBuilder builder;
 
     public JsonParserImpl() {
-        builder = new StringBuilder("[ {\n");
+        builder = new StringBuilder("[{");
     }
 
     @Override
@@ -19,9 +20,35 @@ public class JsonParserImpl implements JsonParser {
         Arrays.stream(allFields).forEach(field -> field.setAccessible(true));
         createJsonString(object).toString();
         builder.deleteCharAt(builder.length() - 1);
-        builder.append("\n} ]");
+        builder.append("}]");
         return builder.toString();
     }
+
+    @Override
+    public Object deserialize(String json, Class objectClass) throws Exception {
+
+        Constructor[] constructors = objectClass.getConstructors();
+        Object obj = constructors[0].newInstance();
+        Arrays.stream(objectClass.getDeclaredFields()).forEach(field -> field.setAccessible(true));
+
+        String[] pairs = json.substring(2, json.length() - 2).split(",");
+        Arrays.stream(pairs).forEach(pair -> {
+            try {
+            String fieldName = pair.split(":")[0];
+            String value = pair.split(":")[1];
+            Field field = objectClass.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            if (isNumeric(value)) {
+                field.set(obj, Integer.parseInt(value));
+            } else
+                field.set(obj, value);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+        return obj;
+    }
+
 
     private StringBuilder createJsonString(Object object) {
 
@@ -38,7 +65,6 @@ public class JsonParserImpl implements JsonParser {
                 e.printStackTrace();
             }
         });
-
         return builder;
     }
 
@@ -61,6 +87,15 @@ public class JsonParserImpl implements JsonParser {
         objectBuilder.deleteCharAt(objectBuilder.length() - 1);
         objectBuilder.append("} ");
         return objectBuilder;
+    }
+
+    private boolean isNumeric(String strNum) {
+
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("-?\\d+(\\.\\d+)?");
+        if (strNum == null) {
+            return false;
+        }
+        return pattern.matcher(strNum).matches();
     }
 
     private boolean isFieldCustomObject(Field field) {
