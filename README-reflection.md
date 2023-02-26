@@ -26,7 +26,7 @@ Readme по заданию reflection
    [UserServiceImpl](https://github.com/jskov259259/ClevertecCheck/blob/feature/cache/app/src/main/java/service/user/UserServiceImpl.java)
    и [UserDaoImpl](https://github.com/jskov259259/ClevertecCheck/blob/feature/cache/app/src/main/java/dao/user/UserDaoImpl.java),
    работа организована через
-   интерфейсы.
+   интерфейсы. Также UserServiceImpl содержит метод getXML(), возвращающий entity в формате XML.
 8. Результат работы dao UserDaoImpl синхронизируется с кэшем через прокси
    [UserDaoCacheProxy](https://github.com/jskov259259/ClevertecCheck/blob/feature/cache/app/src/main/java/utils/cache/UserDaoCacheProxy.java)
    с помощью aspectJ. Релазиованы CRUD операции: GET, POST, DELETE, PUT.
