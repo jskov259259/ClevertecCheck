@@ -1,10 +1,14 @@
 package model;
 
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@XmlRootElement
 public class User {
 
     private Integer id;
@@ -23,6 +27,12 @@ public class User {
     public User(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public User(Integer id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
     }
 
     public User(Integer id, String name, String email, LocalDate birthDay, Integer age) {
@@ -64,6 +74,7 @@ public class User {
         }
     }
 
+    @XmlElement
     public LocalDate getBirthDay() {
         return birthDay;
     }
