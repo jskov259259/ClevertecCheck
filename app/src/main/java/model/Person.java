@@ -1,19 +1,23 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Person {
 
     private Integer id;
 
-    public String name;
+    private String name;
 
-    String email;
+    private String email;
 
-    Integer age;
+    private Integer age;
 
-    Card card;
+    private String[] animals;
+
+    private Card card;
 
     public Card getCard() {
         return card;
@@ -55,6 +59,29 @@ public class Person {
         this.age = age;
     }
 
+    public String[] getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(String[] animals) {
+        this.animals = animals;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(email, person.email) && Objects.equals(age, person.age) && Arrays.equals(animals, person.animals) && Objects.equals(card, person.card);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, email, age, card);
+        result = 31 * result + Arrays.hashCode(animals);
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -62,6 +89,7 @@ public class Person {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
+                ", animals=" + Arrays.toString(animals) +
                 ", card=" + card +
                 '}';
     }
