@@ -5,6 +5,7 @@ import ru.clevertec.check.model.Product;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductDaoCollection implements ProductDao {
 
@@ -29,5 +30,10 @@ public class ProductDaoCollection implements ProductDao {
     @Override
     public List<Product> findAll() {
         return products;
+    }
+
+    public Optional<Product> getProductById(Integer id) {
+
+       return products.stream().filter(product -> product.getId() == id).findFirst();
     }
 }
