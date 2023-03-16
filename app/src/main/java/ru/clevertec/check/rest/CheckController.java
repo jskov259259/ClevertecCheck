@@ -1,6 +1,8 @@
 package ru.clevertec.check.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +11,7 @@ import ru.clevertec.check.model.Product;
 import ru.clevertec.check.service.ItemService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 public class CheckController {
@@ -27,9 +30,13 @@ public class CheckController {
     }
 
     @GetMapping(value="/products/{id}")
-    public Product getProductById(@PathVariable Integer id) {
+    public ResponseEntity<Product> getProductById(@PathVariable Integer id) {
 
-        return itemService.getProductById(id);
+        Optional<Product> product = itemService.getProductById(id);
+        if (product.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(product.get(), HttpStatus.OK);
     }
 
     @GetMapping(value="/check")
