@@ -20,8 +20,8 @@ public class ItemService {
         return productDao.findAll();
     }
 
-    public Product getProductById(Integer id) {
-        return productDao.getProductById(id).get();
+    public Optional<Product> getProductById(Integer id) {
+        return productDao.getProductById(id);
     }
 
     public String getCheckByProductIdAndQuantity(Integer id, Integer quantity) {
